@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050805">
+  <meta name="description" content="Explore browser games, challenges and high scores at Akshaya Cyber World.">
+  <title>Akshaya Cyber World | Online Gaming</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ACW INTRO -->
+  <section id="intro" class="intro-screen">
+    <img src="acw-logo.png" alt="ACW - Akshaya Cyber World">
+    <p>ENTER YOUR GAMING WORLD</p>
+    <div class="loading-line"><span></span></div>
+    <button id="skip-intro" class="skip-btn">SKIP INTRO</button>
+  </section>
+
+  <!-- WEBSITE -->
+  <div id="app" class="app" hidden>
+
+    <header class="topbar">
+      <a href="#home" class="brand" aria-label="ACW Home">
+        <img src="acw-logo.png" alt="ACW logo">
+      </a>
+
+      <div class="brand-text">
+        <strong>AKSHAYA CYBER WORLD</strong>
+        <span>YOUR GAMING UNIVERSE</span>
+      </div>
+
+      <button class="account-button" onclick="openAccount('login')">
+        LOG IN
+      </button>
+    </header>
+
+    <main id="home">
+
+      <section class="welcome">
+        <p class="eyebrow">WELCOME TO ACW</p>
+        <h1>READY.<br><span>PLAY.</span> LEVEL UP.</h1>
+        <p>Discover games. Beat your best. Have fun.</p>
+        <a href="#games" class="primary-button">EXPLORE GAMES ↗</a>
+      </section>
+
+      <section class="search-section" id="search">
+        <label for="game-search">FIND YOUR NEXT GAME</label>
+        <div class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input id="game-search" type="search"
+            placeholder="Search games..."
+            autocomplete="off">
+          <button id="clear-search" aria-label="Clear search">×</button>
+        </div>
+      </section>
+
+      <section class="section" id="games">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PICK YOUR CHALLENGE</p>
+            <h2>GAME <span>ZONE</span></h2>
+          </div>
+          <span id="game-count" class="count">3 GAMES</span>
+        </div>
+
+        <div class="game-grid" id="game-grid">
+
+          <article class="game-card" data-name="Brain Blitz" data-id="brain">
+            <div class="game-art brain-art">🧩</div>
+            <div class="game-info">
+              <span class="game-category">PUZZLE</span>
+              <h3>Brain Blitz</h3>
+              <p>Challenge your logic and solve the puzzle.</p>
+              <button class="game-button" onclick="playGame('brain')">
+                PLAY NOW ↗
+              </button>
+            </div>
+          </article>
+
+          <article class="game-card" data-name="Reaction Rush" data-id="reaction">
+            <div class="game-art reaction-art">⚡</div>
+            <div class="game-info">
+              <span class="game-category">ARCADE</span>
+              <h3>Reaction Rush</h3>
+              <p>Test your reflexes in a quick challenge.</p>
+              <button class="game-button" onclick="playGame('reaction')">
+                PLAY NOW ↗
+              </button>
+            </div>
+          </article>
+
+          <article class="game-card" data-name="Neon Racer" data-id="racer">
+            <div class="game-art racer-art">🏎️</div>
+            <div class="game-info">
+              <span class="game-category">RACING</span>
+              <h3>Neon Racer</h3>
+              <p>Get ready for a future racing challenge.</p>
+              <button class="game-button" onclick="playGame('racer')">
+                COMING SOON
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+        <p id="no-results" hidden>No games found. Try another search.</p>
+      </section>
+
+      <section class="section recently-section" id="recent">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">JUMP BACK IN</p>
+            <h2>RECENTLY <span>PLAYED</span></h2>
+          </div>
+        </div>
+        <div id="recent-list" class="recent-list">
+          <p class="empty-message">Your played games will appear here.</p>
+        </div>
+      </section>
+
+      <section class="section challenge-section">
+        <p class="eyebrow">TEST YOUR BRAIN</p>
+        <h2>DAILY <span>PUZZLE</span></h2>
+        <p>Ready for a quick challenge?</p>
+        <button class="primary-button" onclick="playGame('brain')">
+          TRY A PUZZLE ↗
+        </button>
+      </section>
+
+    </main>
+
+    <footer>
+      <strong>ACW</strong>
+      <p>AKSHAYA CYBER WORLD</p>
+      <small>Play smart. Have fun.</small>
+    </footer>
+
+    <!-- GAME WINDOW -->
+    <div id="game-modal" class="modal" hidden>
+      <div class="modal-card">
+        <button class="close-button" onclick="closeModal('game-modal')"
+          aria-label="Close game">×</button>
+        <div id="game-content"></div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT WINDOW -->
+    <div id="account-modal" class="modal" hidden>
+      <div class="modal-card account-card">
+        <button class="close-button"
+          onclick="closeModal('account-modal')" aria-label="Close">×</button>
+
+        <p class="eyebrow">WELCOME TO ACW</p>
+        <h2 id="account-title">LOG IN</h2>
+
+        <div class="account-tabs">
+          <button id="login-tab" class="tab active"
+            onclick="openAccount('login')">LOG IN</button>
+          <button id="signup-tab" class="tab"
+            onclick="openAccount('signup')">CREATE ACCOUNT</button>
+        </div>
+
+        <form id="account-form">
+          <div id="username-field" hidden>
+            <label for="username">Username</label>
+            <input id="username" name="username" minlength="3"
+              maxlength="24" autocomplete="username"
+              placeholder="Choose a username">
+          </div>
+
+          <div id="contact-field" hidden>
+            <label for="contact">Email or mobile number</label>
+            <input id="contact" name="contact" autocomplete="email"
+              placeholder="Email or mobile number">
+          </div>
+
+          <div id="login-identity-field">
+            <label for="identity">Username or email</label>
+            <input id="identity" name="identity"
+              autocomplete="username" placeholder="Enter username or email">
+          </div>
+
+          <div id="dob-field" hidden>
+            <label for="dob">Date of birth</label>
+            <input id="dob" name="dob" type="date" autocomplete="bday">
+            <small>Your age eligibility will be checked.</small>
+          </div>
+
+          <div>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password"
+              minlength="8" autocomplete="current-password"
+              placeholder="Enter password" required>
+          </div>
+
+          <button class="primary-button submit-button" type="submit">
+            CONTINUE
+          </button>
+          <p id="account-message" class="form-message" role="status"></p>
+        </form>
+
+        <p class="privacy-note">
+          Account creation will be enabled after secure authentication setup.
+        </p>
+      </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <a href="#home" class="nav-item active">
+        <span>⌂</span><small>Home</small>
+      </a>
+      <button class="nav-item" onclick="openAccount('login')">
+        <span>↪</span><small>Log in</small>
+      </button>
+      <a href="#search" class="nav-item">
+        <span>⌕</span><small>Search</small>
+      </a>
+      <button class="nav-item" onclick="openProfile()">
+        <span>◉</span><small>Profile</small>
+      </button>
+    </nav>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
