@@ -1,268 +1,242 @@
 
-// AKSHAYA CYBER WORLD
-// ROCK PAPER SCISSORS GAME
+const $ = (id) => document.getElementById(id);
 
-let gameMode = "";
-let scoreOne = 0;
-let scoreTwo = 0;
-let firstChoice = "";
-let currentRound = 1;
-let playerTurn = "one";
+let yourScore = 0;
+let opponentScore = 0;
+let roundNumber = 1;
+let selected = false;
+let countdownInterval;
+let selectionInterval;
+let timeLeft = 8;
+let gameFinished = false;
 
-const hands = {
+const gestures = {
     rock: "✊",
     paper: "✋",
     scissors: "✌️"
 };
 
-// START GAME
-function startGame(mode) {
-    gameMode = mode;
-    restartGame();
+// Prepare the opponent automatically
+window.addEventListener("load", () => {
+    $("status").textContent = "Preparing your opponent...";
 
-    document.getElementById("modeSection").classList.add("hidden");
-    document.getElementById("gameSection").classList.remove("hidden");
+    setTimeout(() => {
+        $("opponentName").textContent = "AKSHU 🤖";
+        $("status").textContent =
+            "No live matchmaking connected. AKSHU is ready!";
 
-    if (gameMode === "computer") {
-        document.getElementById("modeName").textContent = "Single Player";
-        document.getElementById("playerOneName").textContent = "YOU";
-        document.getElementById("playerTwoName").textContent = "AKSHU 🤖";
-        document.getElementById("message").textContent = "Challenge AKSHU!";
-        document.getElementById("subMessage").textContent =
-            "Choose Rock, Paper or Scissors!";
-    } else {
-        document.getElementById("modeName").textContent = "Two Players";
-        document.getElementById("playerOneName").textContent = "PLAYER 1";
-        document.getElementById("playerTwoName").textContent = "PLAYER 2";
-        document.getElementById("message").textContent = "Player 1, your turn!";
-        document.getElementById("subMessage").textContent =
-            "Choose your hand!";
-    }
+        startRound();
+    }, 1800);
+});
 
-    document.getElementById("choiceSection").classList.remove("hidden");
-    document.getElementById("resultSection").classList.add("hidden");
-    document.getElementById("gameOverSection").classList.add("hidden");
-}
+// Start a round
+function startRound() {
+    if (gameFinished) return;
 
-// PLAYER CHOICE
-function makeChoice(choice) {
+    selected = false;
+    timeLeft = 8;
 
-    if (gameMode === "computer") {
+    $("yourGesture").textContent = "❔";
+    $("opponentGesture").textContent = "❔";
 
-        let computerChoices = ["rock", "paper", "scissors"];
+    $("shakeSection").hidden = false;
+    $("selectionSection").hidden = true;
+    $("resultSection").hidden = true;
+    $("finalSection").hidden = true;
 
-        let computerChoice =
-            computerChoices[Math.floor(Math.random() * 3)];
+    $("shakeHands").style.animationPlayState = "running";
+    $("countdown").textContent = "GET READY!";
+    $("shakeMessage").textContent =
+        "Pink hands are shaking...";
 
-        resolveRound(choice, computerChoice);
+    let count = 3;
 
-    } else {
+    clearInterval(countdownInterval);
+    clearInterval(selectionInterval);
 
-        if (playerTurn === "one") {
+    countdownInterval = setInterval(() => {
+        $("countdown").textContent = count;
 
-            firstChoice = choice;
-            playerTurn = "two";
+        count--;
 
-            document.getElementById("message").textContent =
-                "Player 1 selected!";
+        if (count < 0) {
+            clearInterval(countdownInterval);
 
-            document.getElementById("subMessage").textContent =
-                "Pass the device to Player 2. Don't reveal Player 1's choice!";
+            $("countdown").textContent = "SHOOT!";
+            $("shakeMessage").textContent =
+                "Choose your move now!";
 
-            document.getElementById("choiceTitle").textContent =
-                "Player 2 – Select Your Hand";
+            $("shakeHands").style.animationPlayState = "paused";
 
-        } else {
-
-            resolveRound(firstChoice, choice);
-
+            setTimeout(() => {
+                $("shakeSection").hidden = true;
+                showChoices();
+            }, 450);
         }
-    }
+    }, 1000);
 }
 
-// CHECK WINNER
-function getWinner(choiceOne, choiceTwo) {
+// Show the three choices
+function showChoices() {
+    $("selectionSection").hidden = false;
+    $("timer").textContent = timeLeft;
 
-    if (choiceOne === choiceTwo) {
-        return "draw";
-    }
+    document.querySelectorAll(".choice").forEach(button => {
+        button.disabled = false;
+    });
 
-    if (
-        (choiceOne === "rock" && choiceTwo === "scissors") ||
-        (choiceOne === "paper" && choiceTwo === "rock") ||
-        (choiceOne === "scissors" && choiceTwo === "paper")
-    ) {
-        return "one";
-    }
+    selectionInterval = setInterval(() => {
+        timeLeft--;
 
-    return "two";
-}
+        $("timer").textContent = timeLeft;
 
-// ANIMATE HANDS
-function animateHands() {
+        if (timeLeft <= 0) {
+            clearInterval(selectionInterval);
 
-    const handOne = document.getElementById("handOne");
-    const handTwo = document.getElementById("handTwo");
+            if (!selected) {
+                selected = true;
+                document.querySelectorAll(".choice").forEach(button => {
+                    button.disabled = true;
+                });
 
-    handOne.classList.remove("animate");
-    handTwo.classList.remove("animate");
+                $("selectionSection").hidden = true;
+                $("yourGesture").textContent = "⏰";
+                $("opponentGesture").textContent = "✊";
 
-    void handOne.offsetWidth;
-    void handTwo.offsetWidth;
+                opponentScore++;
+                updateScores();
 
-    handOne.classList.add("animate");
-    handTwo.classList.add("animate");
-}
-
-// PLAY ROUND
-function resolveRound(choiceOne, choiceTwo) {
-
-    document.getElementById("handOne").textContent =
-        hands[choiceOne];
-
-    document.getElementById("handTwo").textContent =
-        hands[choiceTwo];
-
-    animateHands();
-
-    let winner = getWinner(choiceOne, choiceTwo);
-
-    let resultTitle = document.getElementById("resultTitle");
-    let resultText = document.getElementById("resultText");
-
-    if (winner === "draw") {
-
-        resultTitle.textContent = "🤝 It's a Draw!";
-        resultText.textContent = "Both players selected the same hand!";
-
-    } else if (winner === "one") {
-
-        scoreOne++;
-
-        resultTitle.textContent = "🎉 " +
-            (gameMode === "computer" ? "You Win!" : "Player 1 Wins!");
-
-        resultText.textContent = "Great move!";
-
-    } else {
-
-        scoreTwo++;
-
-        resultTitle.textContent = "🏆 " +
-            (gameMode === "computer" ? "AKSHU Wins!" : "Player 2 Wins!");
-
-        resultText.textContent = "Good game! Try again!";
-
-    }
-
-    // UPDATE SCORES
-    document.getElementById("scoreOne").textContent = scoreOne;
-    document.getElementById("scoreTwo").textContent = scoreTwo;
-
-    document.getElementById("roundInfo").textContent =
-        "Round " + currentRound + " | First to 2 wins";
-
-    document.getElementById("choiceSection").classList.add("hidden");
-    document.getElementById("resultSection").classList.remove("hidden");
-
-    // CHECK MATCH WINNER
-    if (scoreOne === 2 || scoreTwo === 2) {
-
-        document.getElementById("resultSection").classList.add("hidden");
-        document.getElementById("gameOverSection").classList.remove("hidden");
-
-        if (scoreOne === 2) {
-
-            document.getElementById("winnerTitle").textContent =
-                gameMode === "computer"
-                    ? "🏆 YOU DEFEATED AKSHU!"
-                    : "🏆 PLAYER 1 WINS!";
-
-        } else {
-
-            document.getElementById("winnerTitle").textContent =
-                gameMode === "computer"
-                    ? "🤖 AKSHU WINS THE MATCH!"
-                    : "🏆 PLAYER 2 WINS!";
-
+                showResult(
+                    "TIME UP!",
+                    "You did not choose in time. AKSHU gets this round."
+                );
+            }
         }
+    }, 1000);
+}
 
-        document.getElementById("winnerText").textContent =
-            "Final Score: " + scoreOne + " - " + scoreTwo;
+// Listen to the player's choice
+document.querySelectorAll(".choice").forEach(button => {
+    button.addEventListener("click", () => {
+        if (selected || gameFinished) return;
 
+        selected = true;
+        clearInterval(selectionInterval);
+
+        document.querySelectorAll(".choice").forEach(btn => {
+            btn.disabled = true;
+        });
+
+        const yourChoice = button.dataset.choice;
+
+        // AKSHU makes an automatic choice
+        const options = ["rock", "paper", "scissors"];
+        const computerChoice =
+            options[Math.floor(Math.random() * options.length)];
+
+        $("selectionSection").hidden = true;
+
+        setTimeout(() => {
+            $("yourGesture").textContent = gestures[yourChoice];
+            $("opponentGesture").textContent =
+                gestures[computerChoice];
+
+            calculateWinner(yourChoice, computerChoice);
+        }, 500);
+    });
+});
+
+// Decide the round winner
+function calculateWinner(player, computer) {
+    if (player === computer) {
+        showResult(
+            "🤝 DRAW!",
+            "Both selected " + player.toUpperCase() + ". Try again!"
+        );
+        return;
+    }
+
+    const playerWins =
+        (player === "rock" && computer === "scissors") ||
+        (player === "paper" && computer === "rock") ||
+        (player === "scissors" && computer === "paper");
+
+    if (playerWins) {
+        yourScore++;
+
+        showResult(
+            "🎉 YOU WIN!",
+            player.toUpperCase() + " beats " +
+            computer.toUpperCase() + "!"
+        );
+    } else {
+        opponentScore++;
+
+        showResult(
+            "🤖 AKSHU WINS!",
+            computer.toUpperCase() + " beats " +
+            player.toUpperCase() + "!"
+        );
+    }
+
+    updateScores();
+}
+
+// Update scoreboard
+function updateScores() {
+    $("yourScore").textContent = yourScore;
+    $("opponentScore").textContent = opponentScore;
+}
+
+// Display round result
+function showResult(title, message) {
+    $("resultSection").hidden = false;
+    $("resultTitle").textContent = title;
+    $("resultMessage").textContent = message;
+
+    if (yourScore >= 2 || opponentScore >= 2) {
+        setTimeout(finishGame, 900);
     }
 }
 
-// NEXT ROUND
-function nextRound() {
+// Next round
+$("nextButton").addEventListener("click", () => {
+    if (gameFinished) return;
 
-    currentRound++;
+    roundNumber++;
+    startRound();
+});
 
-    playerTurn = "one";
-    firstChoice = "";
+// Finish the match
+function finishGame() {
+    gameFinished = true;
 
-    document.getElementById("handOne").textContent = "✊";
-    document.getElementById("handTwo").textContent = "✊";
+    $("resultSection").hidden = true;
+    $("shakeSection").hidden = true;
+    $("selectionSection").hidden = true;
+    $("finalSection").hidden = false;
 
-    document.getElementById("resultSection").classList.add("hidden");
-    document.getElementById("choiceSection").classList.remove("hidden");
+    if (yourScore >= 2) {
+        $("finalTitle").textContent = "🏆 YOU DEFEATED AKSHU!";
+    } else {
+        $("finalTitle").textContent = "🤖 AKSHU WINS!";
+    }
 
-    document.getElementById("choiceTitle").textContent =
-        gameMode === "computer"
-            ? "Select Your Hand"
-            : "Player 1 – Select Your Hand";
-
-    document.getElementById("message").textContent =
-        gameMode === "computer"
-            ? "Next Round! Challenge AKSHU!"
-            : "Player 1, your turn!";
-
-    document.getElementById("subMessage").textContent =
-        "Make your move!";
-
-    document.getElementById("roundInfo").textContent =
-        "Round " + currentRound + " | First to 2 wins";
+    $("finalScore").textContent =
+        "Final Score: " + yourScore + " - " + opponentScore;
 }
 
-// RESTART MATCH
-function restartGame() {
+// Play again
+$("restartButton").addEventListener("click", () => {
+    clearInterval(countdownInterval);
+    clearInterval(selectionInterval);
 
-    scoreOne = 0;
-    scoreTwo = 0;
-    currentRound = 1;
-    firstChoice = "";
-    playerTurn = "one";
+    yourScore = 0;
+    opponentScore = 0;
+    roundNumber = 1;
+    selected = false;
+    gameFinished = false;
 
-    document.getElementById("scoreOne").textContent = "0";
-    document.getElementById("scoreTwo").textContent = "0";
-
-    document.getElementById("handOne").textContent = "✊";
-    document.getElementById("handTwo").textContent = "✊";
-
-    document.getElementById("roundInfo").textContent =
-        "Round 1 | First to 2 wins";
-
-    document.getElementById("resultSection").classList.add("hidden");
-    document.getElementById("gameOverSection").classList.add("hidden");
-    document.getElementById("choiceSection").classList.remove("hidden");
-
-    document.getElementById("choiceTitle").textContent =
-        gameMode === "two"
-            ? "Player 1 – Select Your Hand"
-            : "Select Your Hand";
-
-    document.getElementById("message").textContent =
-        "Let's Play!";
-
-    document.getElementById("subMessage").textContent =
-        "Choose your hand!";
-}
-
-// CHANGE GAME MODE
-function backToModes() {
-
-    document.getElementById("gameSection").classList.add("hidden");
-    document.getElementById("modeSection").classList.remove("hidden");
-
-    gameMode = "";
-}
+    updateScores();
+    startRound();
+});
