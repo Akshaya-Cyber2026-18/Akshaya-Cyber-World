@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors | Akshaya Cyber World</title>
+    <link rel="stylesheet" href="rps.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="back-btn">← Back to Game Zone</a>
+        <h1>✊ Rock Paper Scissors ✌️</h1>
+        <p>Challenge your friends or play against AKSHU!</p>
+    </header>
+
+    <main class="game-container">
+
+        <section class="mode-section" id="modeSection">
+            <h2>Choose Your Game Mode</h2>
+
+            <button class="mode-btn" onclick="startGame('computer')">
+                🤖 Single Player
+                <span>Play against AKSHU</span>
+            </button>
+
+            <button class="mode-btn" onclick="startGame('two')">
+                👥 Two Players
+                <span>Play with your friend</span>
+            </button>
+        </section>
+
+        <section id="gameSection" class="game-section hidden">
+
+            <div class="top-info">
+                <span id="modeName">Game Mode</span>
+                <span id="roundInfo">Best of 3</span>
+            </div>
+
+            <div class="scoreboard">
+                <div class="player-card">
+                    <h3 id="playerOneName">YOU</h3>
+                    <div class="hand" id="handOne">✊</div>
+                    <p>Score: <span id="scoreOne">0</span></p>
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="player-card">
+                    <h3 id="playerTwoName">AKSHU</h3>
+                    <div class="hand" id="handTwo">✊</div>
+                    <p>Score: <span id="scoreTwo">0</span></p>
+                </div>
+            </div>
+
+            <div class="message-box">
+                <h2 id="message">Choose your move!</h2>
+                <p id="subMessage">Rock Paper Scissors</p>
+            </div>
+
+            <div id="choiceSection">
+                <h3 id="choiceTitle">Select Your Hand</h3>
+
+                <div class="choices">
+                    <button class="choice-btn" onclick="makeChoice('rock')">
+                        <span>✊</span>
+                        Rock
+                    </button>
+
+                    <button class="choice-btn" onclick="makeChoice('paper')">
+                        <span>✋</span>
+                        Paper
+                    </button>
+
+                    <button class="choice-btn" onclick="makeChoice('scissors')">
+                        <span>✌️</span>
+                        Scissors
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultSection" class="result-section hidden">
+                <h2 id="resultTitle"></h2>
+                <p id="resultText"></p>
+                <button class="main-btn" onclick="nextRound()">Next Round</button>
+            </div>
+
+            <div id="gameOverSection" class="result-section hidden">
+                <h1>🏆</h1>
+                <h2 id="winnerTitle"></h2>
+                <p id="winnerText"></p>
+                <button class="main-btn" onclick="restartGame()">Play Again</button>
+                <button class="secondary-btn" onclick="backToModes()">Change Mode</button>
+            </div>
+
+            <button class="exit-btn" onclick="backToModes()">Exit Game</button>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Created by Akshaya | Akshaya Cyber World 🛡️</p>
+    </footer>
+
+    <script src="rps.js"></script>
+</body>
+</html>
