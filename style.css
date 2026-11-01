@@ -1,606 +1,326 @@
 
-:root {
-  --bg: #050805;
-  --panel: #0d150d;
-  --green: #61ff45;
-  --muted: #a3b3a0;
-  --border: #293b27;
+/* =================================
+   ACW - AKSHAYA CYBER WORLD
+   BLUE PURPLE NEON GAMING THEME
+================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
-* { box-sizing: border-box; }
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 25px;
+:root {
+  --bg: #030817;
+  --panel: #0a1530;
+  --blue: #00c8ff;
+  --cyan: #42edff;
+  --purple: #a855ff;
+  --text: #f4f7ff;
+  --muted: #aab8d3;
 }
 
 body {
-  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   background: var(--bg);
-  color: #f5fff2;
-  font-family: Arial, sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
 }
 
-button, input { font: inherit; }
-button, a { -webkit-tap-highlight-color: transparent; }
-button { cursor: pointer; }
-a { color: inherit; text-decoration: none; }
+/* NAVBAR */
 
-[hidden] { display: none !important; }
-
-.app {
+.navbar {
   width: 100%;
-  max-width: 1440px;
-  margin: auto;
-  padding-bottom: 25px;
-}
-
-/* INTRO */
-
-.intro-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: #020402;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: introFade 0.6s ease;
-}
-
-.intro-screen img {
-  width: min(85vw, 620px);
-  max-height: 65vh;
-  object-fit: contain;
-  filter: drop-shadow(0 0 25px #3cff4260);
-  animation: logoReveal 1.2s ease both;
-}
-
-.intro-screen p {
-  color: var(--green);
-  letter-spacing: 4px;
-  font-size: 11px;
-  text-align: center;
-}
-
-.loading-line {
-  width: min(230px, 70vw);
-  height: 3px;
-  margin-top: 15px;
-  background: #1b291a;
-  overflow: hidden;
-}
-
-.loading-line span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--green);
-  transform-origin: left;
-  animation: loadLine 4.5s linear forwards;
-}
-
-.skip-btn {
-  position: absolute;
-  bottom: 25px;
-  right: 25px;
-  min-height: 44px;
-  padding: 10px 16px;
-  color: var(--green);
-  border: 1px solid var(--green);
-  background: transparent;
-}
-
-@keyframes logoReveal {
-  from { opacity: 0; transform: scale(.88); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes loadLine {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-@keyframes introFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* HEADER */
-
-.topbar {
-  min-height: 95px;
-  padding: 12px 6%;
+  min-height: 85px;
+  padding: 12px 7%;
   display: flex;
   align-items: center;
-  gap: 15px;
-  border-bottom: 1px solid var(--border);
-  background: #070b07;
-}
-
-.brand {
-  display: block;
-  width: 75px;
-  height: 68px;
-  flex-shrink: 0;
+  justify-content: space-between;
+  background: rgba(3, 8, 23, 0.94);
+  border-bottom: 1px solid rgba(0, 200, 255, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(15px);
 }
 
 .brand img {
-  width: 100%;
-  height: 100%;
+  width: 145px;
+  height: 65px;
   object-fit: contain;
 }
 
-.brand-text {
-  flex: 1;
+.navbar nav {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
+  gap: 30px;
+  align-items: center;
 }
 
-.brand-text strong {
-  color: var(--green);
-  font-size: clamp(11px, 2vw, 16px);
-  letter-spacing: 2px;
-}
-
-.brand-text span {
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 2px;
-}
-
-.account-button {
-  min-height: 46px;
-  padding: 0 18px;
-  color: var(--green);
-  border: 1px solid var(--green);
-  background: transparent;
+.navbar nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
   font-weight: bold;
+  transition: 0.3s;
 }
 
-/* HERO */
+.navbar nav a:hover {
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--blue);
+}
 
-.welcome {
+/* HERO SECTION */
+
+.hero {
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
   position: relative;
-  padding: 65px 8%;
+  overflow: hidden;
   background:
-    radial-gradient(ellipse at 85% 45%, #153514 0%, transparent 40%),
-    linear-gradient(120deg, #060906, #0a1009);
-  border-bottom: 1px solid var(--border);
+    radial-gradient(ellipse at 20% 40%, rgba(0, 115, 255, 0.19), transparent 45%),
+    radial-gradient(ellipse at 80% 50%, rgba(168, 85, 255, 0.18), transparent 45%),
+    linear-gradient(135deg, #030817, #071630, #09091e);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(0, 200, 255, 0.16);
+  border-radius: 50%;
+  box-shadow:
+    0 0 50px rgba(0, 200, 255, 0.12),
+    inset 0 0 50px rgba(168, 85, 255, 0.1);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
 }
 
 .eyebrow {
-  color: var(--green);
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 3px;
-}
-
-.welcome h1 {
-  margin: 20px 0;
-  font-size: clamp(36px, 6vw, 68px);
-  line-height: 1.12;
-  letter-spacing: 1px;
-}
-
-.welcome h1 span,
-h2 span { color: var(--green); }
-
-.welcome > p:not(.eyebrow),
-.challenge-section > p:not(.eyebrow) {
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.primary-button {
-  min-height: 48px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 13px 20px;
-  background: var(--green);
-  color: #061005;
-  border: 1px solid var(--green);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-/* SEARCH */
-
-.search-section {
-  padding: 28px 7% 10px;
-}
-
-.search-section label,
-.modal-card label {
-  display: block;
-  margin-bottom: 10px;
+  color: var(--cyan);
   font-size: 12px;
   font-weight: bold;
-  color: #eaffdf;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
 }
 
-.search-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 14px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-}
-
-.search-box > span {
-  font-size: 28px;
-  color: var(--green);
-}
-
-.search-box input {
-  width: 100%;
-  min-width: 0;
-  min-height: 48px;
-  color: white;
-  background: transparent;
-  border: 0;
-  outline: none;
-}
-
-.search-box button {
-  min-width: 40px;
-  min-height: 40px;
-  border: 0;
-  background: transparent;
-  color: white;
-  font-size: 24px;
-}
-
-/* GAME CARDS */
-
-.section {
-  padding: 40px 7%;
-}
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+.hero h1 {
+  font-size: clamp(35px, 6vw, 65px);
+  line-height: 1.2;
   margin-bottom: 22px;
-}
-
-.section-heading h2,
-.challenge-section h2,
-.modal-card h2 {
-  font-size: clamp(22px, 4vw, 32px);
-  margin: 10px 0;
-}
-
-.count {
-  color: var(--muted);
-  font-size: 11px;
-  white-space: nowrap;
-}
-
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.game-card {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  transition: border-color .2s, transform .2s;
-}
-
-.game-card:hover {
-  border-color: var(--green);
-  transform: translateY(-3px);
-}
-
-.game-art {
-  min-height: 150px;
-  display: grid;
-  place-items: center;
-  font-size: 58px;
-  background: radial-gradient(circle, #1d3d19, #091009 70%);
-  border-bottom: 1px solid var(--border);
-}
-
-.reaction-art {
-  background: radial-gradient(circle, #264119, #091009 70%);
-}
-
-.racer-art {
-  background: radial-gradient(circle, #163c27, #091009 70%);
-}
-
-.game-info { padding: 20px; }
-
-.game-category {
-  color: var(--green);
-  font-size: 10px;
   letter-spacing: 2px;
 }
 
-.game-info h3 { font-size: 18px; }
-
-.game-info p {
-  min-height: 45px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
+.hero h1 span,
+.section-heading h2 span,
+.about-section h2 span {
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.game-button {
-  width: 100%;
-  min-height: 48px;
-  padding: 12px 8px;
-  color: var(--green);
-  background: #0a1109;
-  border: 1px solid #416b39;
-  font-size: 11px;
+.hero-description {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.primary-btn {
+  display: inline-block;
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #007bff, #8b35ed);
+  border-radius: 7px;
+  color: white;
+  text-decoration: none;
   font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 0 25px rgba(0, 153, 255, 0.3);
+  transition: 0.3s;
 }
 
-#no-results {
-  padding: 20px 0;
+.primary-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 35px rgba(0, 200, 255, 0.55);
+}
+
+/* GAME ZONE */
+
+.games-section {
+  padding: 90px 7%;
+  background: #050d20;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-heading h2,
+.about-section h2 {
+  font-size: clamp(30px, 5vw, 44px);
+  margin-bottom: 15px;
+}
+
+.section-heading > p:last-child {
   color: var(--muted);
 }
 
-.recent-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+  max-width: 1150px;
+  margin: auto;
 }
 
-.recent-item {
-  min-height: 46px;
-  padding: 12px 16px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--green);
+.game-card {
+  background: linear-gradient(145deg, #0c1c3b, #090e21);
+  border: 1px solid rgba(0, 200, 255, 0.2);
+  border-radius: 15px;
+  padding: 30px 22px;
+  text-align: center;
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
-.empty-message { color: var(--muted); }
-
-.challenge-section {
-  margin: 10px 7% 35px;
-  padding: 30px;
-  border: 1px solid var(--border);
-  background: linear-gradient(120deg, #101d0d, #070b07);
+.game-card:hover {
+  transform: translateY(-9px);
+  border-color: var(--cyan);
+  box-shadow:
+    0 0 20px rgba(0, 200, 255, 0.16),
+    0 0 35px rgba(168, 85, 255, 0.12);
 }
+
+.game-icon {
+  font-size: 55px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 12px rgba(0, 200, 255, 0.5));
+}
+
+.game-card h3 {
+  font-size: 21px;
+  margin-bottom: 12px;
+}
+
+.game-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 45px;
+  margin-bottom: 22px;
+}
+
+.game-card button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #007bff, #843cff);
+  transition: 0.3s;
+}
+
+.game-card button:hover {
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
+  transform: scale(1.03);
+}
+
+/* ABOUT SECTION */
+
+.about-section {
+  padding: 85px 20px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at center, rgba(45, 65, 160, 0.15), transparent 65%),
+    #030817;
+}
+
+.about-section > p:last-child {
+  color: var(--muted);
+  max-width: 600px;
+  margin: 20px auto 0;
+  line-height: 1.8;
+}
+
+/* FOOTER */
 
 footer {
-  padding: 30px 15px;
+  padding: 25px 15px;
   text-align: center;
-  border-top: 1px solid var(--border);
-}
-
-footer strong {
-  color: var(--green);
-  font-size: 28px;
-}
-
-footer p {
-  font-size: 11px;
-  letter-spacing: 3px;
-}
-
-footer small { color: var(--muted); }
-
-/* MODALS */
-
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: #000d;
-  overflow-y: auto;
-}
-
-.modal-card {
-  position: relative;
-  width: min(100%, 480px);
-  max-height: 90dvh;
-  overflow-y: auto;
-  padding: 28px 22px;
-  background: #0a1009;
-  border: 1px solid var(--green);
-}
-
-.close-button {
-  display: block;
-  margin-left: auto;
-  width: 44px;
-  height: 44px;
-  color: white;
-  background: transparent;
-  border: 1px solid var(--border);
-  font-size: 25px;
-}
-
-.account-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.tab {
-  min-height: 46px;
-  background: transparent;
+  background: #020510;
+  border-top: 1px solid rgba(0, 200, 255, 0.2);
   color: var(--muted);
-  border: 1px solid var(--border);
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.tab.active {
-  color: var(--green);
-  border-color: var(--green);
-}
-
-#account-form {
-  display: grid;
-  gap: 17px;
-}
-
-#account-form input {
-  width: 100%;
-  min-height: 48px;
-  padding: 12px;
-  background: #050805;
-  color: white;
-  border: 1px solid #334432;
-  border-radius: 0;
-}
-
-#account-form small,
-.privacy-note {
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.submit-button { width: 100%; }
-
-.form-message {
-  color: var(--green);
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 2;
 }
 
-/* MOBILE NAV */
+/* MOBILE RESPONSIVE */
 
-.bottom-nav { display: none; }
+@media (max-width: 850px) {
+  .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
-@media (max-width: 700px) {
-  body { padding-bottom: 76px; }
-
-  .topbar {
-    min-height: 20vh;
-    padding: 10px 15px;
-    gap: 10px;
+@media (max-width: 600px) {
+  .navbar {
+    padding: 10px 4%;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .brand {
-    width: 66px;
-    height: 66px;
+  .brand img {
+    width: 130px;
+    height: 55px;
   }
 
-  .brand-text strong {
-    font-size: 11px;
-    letter-spacing: 1px;
-    line-height: 1.6;
+  .navbar nav {
+    gap: 20px;
   }
 
-  .brand-text span {
-    font-size: 9px;
-    letter-spacing: 1px;
+  .navbar nav a {
+    font-size: 12px;
   }
 
-  .account-button {
-    min-height: 44px;
-    padding: 0 10px;
-    font-size: 10px;
+  .hero {
+    min-height: 470px;
+    padding: 65px 18px;
   }
 
-  .welcome { padding: 42px 6%; }
+  .hero-description {
+    font-size: 14px;
+  }
 
-  .welcome h1 { font-size: clamp(32px, 9vw, 48px); }
+  .games-section {
+    padding: 65px 5%;
+  }
 
-  .section { padding: 30px 5%; }
-
-  .search-section { padding: 24px 5% 5px; }
-
-  .game-grid { grid-template-columns: 1fr; gap: 16px; }
+  .games-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
   .game-card {
-    display: grid;
-    grid-template-columns: 105px minmax(0, 1fr);
+    padding: 28px 20px;
   }
 
-  .game-art {
-    min-height: 100%;
-    font-size: 40px;
-    border-bottom: 0;
-    border-right: 1px solid var(--border);
-  }
-
-  .game-info { padding: 14px; }
-
-  .game-info h3 {
-    font-size: 16px;
-    margin: 8px 0;
-  }
-
-  .game-info p {
-    min-height: 0;
-    font-size: 12px;
-    margin: 8px 0 12px;
-  }
-
-  .game-button { min-height: 48px; }
-
-  .challenge-section {
-    margin: 5px 5% 25px;
-    padding: 22px 16px;
-  }
-
-  .bottom-nav {
-    position: fixed;
-    z-index: 500;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    min-height: 70px;
-    padding: 6px 4px max(6px, env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    background: #080d08;
-    border-top: 1px solid #34502e;
-  }
-
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
-    min-height: 48px;
-    border: 0;
-    background: transparent;
-    color: #c4d0c1;
-  }
-
-  .nav-item span { font-size: 23px; }
-  .nav-item small { font-size: 10px; }
-
-  .nav-item.active { color: var(--green); }
-
-  .modal { padding: 10px; }
-
-  .modal-card { padding: 20px 16px; }
-
-  .intro-screen img { width: 94vw; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    scroll-behavior: auto !important;
-    transition-duration: .01ms !important;
+  .about-section {
+    padding: 65px 20px;
   }
 }
