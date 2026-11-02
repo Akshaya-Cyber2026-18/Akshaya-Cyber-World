@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Runner | ACW</title>
+  <link rel="stylesheet" href="runner.css">
+</head>
+<body>
+
+  <header class="game-header">
+    <a href="index.html" class="back-button">← BACK TO ACW</a>
+    <h1>CYBER <span>RUNNER</span></h1>
+    <p>Run fast. Jump high. Beat your high score!</p>
+  </header>
+
+  <main class="game-container">
+
+    <div class="score-board">
+      <div>
+        <small>SCORE</small>
+        <strong id="score">0</strong>
+      </div>
+      <div>
+        <small>BEST SCORE</small>
+        <strong id="bestScore">0</strong>
+      </div>
+    </div>
+
+    <div class="game-area" id="gameArea">
+
+      <div class="game-message" id="gameMessage">
+        <h2>READY TO RUN?</h2>
+        <p>Press START to begin your adventure!</p>
+        <button id="startButton">START GAME</button>
+      </div>
+
+      <div class="runner-character" id="player">🏃</div>
+
+      <div class="obstacle" id="obstacle">🚧</div>
+
+      <div class="ground"></div>
+
+    </div>
+
+    <div class="game-controls">
+      <button id="jumpButton">⬆ JUMP</button>
+      <button id="restartButton">↻ RESTART</button>
+    </div>
+
+    <p class="instructions">
+      Computer: Press SPACE or UP arrow to jump.<br>
+      Mobile: Tap the JUMP button.
+    </p>
+
+  </main>
+
+  <script src="runner.js"></script>
+</body>
+</html>
