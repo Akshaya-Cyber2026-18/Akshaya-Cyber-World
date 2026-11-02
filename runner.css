@@ -1,0 +1,206 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #f4f7ff;
+  background:
+    radial-gradient(circle at top left, #102b59, transparent 45%),
+    radial-gradient(circle at bottom right, #32134f, transparent 45%),
+    #030817;
+  padding: 25px 15px;
+}
+
+.game-header {
+  text-align: center;
+  margin: 20px auto 35px;
+}
+
+.back-button {
+  display: inline-block;
+  color: #42edff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 25px;
+}
+
+.game-header h1 {
+  font-size: clamp(32px, 6vw, 55px);
+  letter-spacing: 3px;
+}
+
+.game-header h1 span {
+  color: #00c8ff;
+  text-shadow: 0 0 18px #007bff;
+}
+
+.game-header p {
+  color: #aab8d3;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+  padding: 25px;
+  background: rgba(10, 21, 48, 0.9);
+  border: 1px solid rgba(0, 200, 255, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 0 35px rgba(0, 130, 255, 0.12);
+}
+
+.score-board {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.score-board div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.score-board small {
+  color: #aab8d3;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.score-board strong {
+  color: #42edff;
+  font-size: 26px;
+}
+
+.game-area {
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #1769ad;
+  background:
+    linear-gradient(rgba(4, 15, 40, 0.65), rgba(4, 15, 40, 0.9)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 49px,
+      rgba(0, 200, 255, 0.08) 50px
+    ),
+    linear-gradient(180deg, #102b59, #071126);
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  height: 12px;
+  width: 100%;
+  background: linear-gradient(90deg, #007bff, #a855ff);
+  box-shadow: 0 0 18px #00c8ff;
+}
+
+.runner-character {
+  position: absolute;
+  bottom: 12px;
+  left: 65px;
+  z-index: 2;
+  font-size: 52px;
+  transition: none;
+  display: none;
+}
+
+.obstacle {
+  position: absolute;
+  bottom: 12px;
+  right: 30px;
+  font-size: 38px;
+  display: none;
+}
+
+.game-message {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 17px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(3, 8, 23, 0.8);
+}
+
+.game-message h2 {
+  color: #42edff;
+  font-size: 27px;
+}
+
+.game-message p {
+  color: #d5e4ff;
+  font-size: 14px;
+}
+
+button {
+  border: none;
+  border-radius: 7px;
+  padding: 13px 25px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, #007bff, #843cff);
+  transition: 0.25s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 18px #008cff;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 22px;
+}
+
+.instructions {
+  color: #aab8d3;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 15px 10px;
+  }
+
+  .game-container {
+    padding: 15px;
+  }
+
+  .game-area {
+    height: 260px;
+  }
+
+  .runner-character {
+    left: 30px;
+  }
+
+  .game-controls {
+    flex-direction: column;
+  }
+
+  .game-controls button {
+    width: 100%;
+  }
+}
