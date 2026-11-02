@@ -27,7 +27,10 @@ function openGame(gameId) {
     window.location.href = "rps.html";
     return;
   }
-
+if (gameId === "runner") {
+  window.location.href = "runner.html";
+  return;
+}
   // Other games will be added step by step
   showMessage(
     gameNames[gameId] + " is coming soon! Stay tuned. 💙"
