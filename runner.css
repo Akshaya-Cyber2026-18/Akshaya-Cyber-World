@@ -1,4 +1,9 @@
 
+/* =====================================
+   ACW - CYBER RUNNER
+   NEON SIDE SCROLLING DESIGN
+===================================== */
+
 * {
   margin: 0;
   padding: 0;
@@ -15,6 +20,8 @@ body {
     #030817;
   padding: 25px 15px;
 }
+
+/* HEADER */
 
 .game-header {
   text-align: center;
@@ -46,6 +53,8 @@ body {
   font-size: 14px;
 }
 
+/* GAME CONTAINER */
+
 .game-container {
   width: 100%;
   max-width: 850px;
@@ -56,6 +65,8 @@ body {
   border-radius: 18px;
   box-shadow: 0 0 35px rgba(0, 130, 255, 0.12);
 }
+
+/* SCORE */
 
 .score-board {
   display: flex;
@@ -80,49 +91,189 @@ body {
   font-size: 26px;
 }
 
+/* GAME AREA */
+
 .game-area {
   height: 300px;
   position: relative;
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid #1769ad;
+
   background:
-    linear-gradient(rgba(4, 15, 40, 0.65), rgba(4, 15, 40, 0.9)),
+    linear-gradient(
+      180deg,
+      rgba(4, 15, 40, 0.15),
+      rgba(4, 15, 40, 0.65)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #102b59 0px,
+      #102b59 65px,
+      #172c61 66px,
+      #102b59 130px
+    );
+
+  isolation: isolate;
+}
+
+/* MOVING CITY BACKGROUND */
+
+.game-area::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 12px;
+  z-index: 0;
+
+  background:
     repeating-linear-gradient(
       90deg,
       transparent 0px,
-      transparent 49px,
-      rgba(0, 200, 255, 0.08) 50px
+      transparent 35px,
+      rgba(0, 220, 255, 0.5) 36px,
+      transparent 42px,
+      transparent 80px
     ),
-    linear-gradient(180deg, #102b59, #071126);
+    repeating-linear-gradient(
+      90deg,
+      #101e48 0px,
+      #101e48 35px,
+      #18366d 36px,
+      #101e48 65px
+    );
+
+  background-size: 100% 100%, 160px 100%;
+  background-position: 0 0, 0 bottom;
+  animation: cityMove 3s linear infinite;
 }
 
-.ground {
+/* NEON SPEED LINES */
+
+.game-area::after {
+  content: "";
   position: absolute;
-  bottom: 0;
-  height: 12px;
-  width: 100%;
-  background: linear-gradient(90deg, #007bff, #a855ff);
-  box-shadow: 0 0 18px #00c8ff;
+  left: 0;
+  right: 0;
+  bottom: 15px;
+  height: 75px;
+  z-index: 1;
+
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 35px,
+    rgba(0, 200, 255, 0.8) 36px,
+    transparent 95px
+  );
+
+  animation: speedLines 0.5s linear infinite;
+  pointer-events: none;
 }
+
+@keyframes cityMove {
+  from {
+    background-position: 0 0, 0 bottom;
+  }
+  to {
+    background-position: -160px 0, -320px bottom;
+  }
+}
+
+@keyframes speedLines {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -130px 0;
+  }
+}
+
+/* RUNNER CHARACTER */
 
 .runner-character {
   position: absolute;
   bottom: 12px;
   left: 65px;
-  z-index: 2;
-  font-size: 52px;
-  transition: none;
+  width: 90px;
+  height: 115px;
+  z-index: 3;
   display: none;
+  transform-origin: center bottom;
 }
+
+.runner-character svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px #00c8ff);
+}
+
+/* RUNNING BOUNCE */
+
+.runner-character.running {
+  animation: runnerRun 0.22s ease-in-out infinite alternate;
+}
+
+@keyframes runnerRun {
+  from {
+    transform: translateY(0) rotate(-2deg);
+  }
+  to {
+    transform: translateY(-7px) rotate(2deg);
+  }
+}
+
+/* JUMP EFFECT */
+
+.runner-character.jumping {
+  animation: none;
+  filter: drop-shadow(0 0 15px #42edff);
+}
+
+/* OBSTACLE */
 
 .obstacle {
   position: absolute;
   bottom: 12px;
   right: 30px;
+  z-index: 3;
   font-size: 38px;
   display: none;
+  filter: drop-shadow(0 0 8px #ff9d00);
 }
+
+/* MOVING ROAD */
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  height: 12px;
+  width: 200%;
+  z-index: 4;
+
+  background: repeating-linear-gradient(
+    90deg,
+    #007bff 0px,
+    #007bff 35px,
+    #42edff 36px,
+    #a855ff 65px,
+    #007bff 100px
+  );
+
+  box-shadow: 0 0 18px #00c8ff;
+  animation: roadMove 0.35s linear infinite;
+}
+
+@keyframes roadMove {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100px);
+  }
+}
+
+/* GAME MESSAGE */
 
 .game-message {
   position: absolute;
@@ -135,7 +286,7 @@ body {
   gap: 17px;
   padding: 20px;
   text-align: center;
-  background: rgba(3, 8, 23, 0.8);
+  background: rgba(3, 8, 23, 0.82);
 }
 
 .game-message h2 {
@@ -147,6 +298,8 @@ body {
   color: #d5e4ff;
   font-size: 14px;
 }
+
+/* BUTTONS */
 
 button {
   border: none;
@@ -171,6 +324,16 @@ button:hover {
   margin-top: 22px;
 }
 
+#jumpButton {
+  background: linear-gradient(90deg, #007bff, #00c8ff);
+}
+
+#restartButton {
+  background: linear-gradient(90deg, #843cff, #c026ff);
+}
+
+/* INSTRUCTIONS */
+
 .instructions {
   color: #aab8d3;
   text-align: center;
@@ -179,7 +342,10 @@ button:hover {
   margin-top: 20px;
 }
 
+/* MOBILE RESPONSIVE */
+
 @media (max-width: 600px) {
+
   body {
     padding: 15px 10px;
   }
@@ -194,6 +360,8 @@ button:hover {
 
   .runner-character {
     left: 30px;
+    width: 75px;
+    height: 100px;
   }
 
   .game-controls {
@@ -202,5 +370,18 @@ button:hover {
 
   .game-controls button {
     width: 100%;
+  }
+
+  .game-header h1 {
+    font-size: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-area::before,
+  .game-area::after,
+  .ground,
+  .runner-character.running {
+    animation-duration: 2s;
   }
 }
