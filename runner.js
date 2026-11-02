@@ -1,6 +1,7 @@
 
 /* =====================================
    ACW - CYBER RUNNER GAME
+   SIDE SCROLLING VERSION
 ===================================== */
 
 const player = document.getElementById("player");
@@ -27,13 +28,14 @@ let obstacleX = 0;
 let gameSpeed = 5;
 
 let animationFrame;
+let jumpFrame;
 let scoreTimer;
 let lastTime = 0;
 let obstacleGap = 0;
 
 bestScoreText.textContent = bestScore;
 
-// Start game
+// START GAME
 function startGame() {
 
   if (gameRunning) return;
@@ -52,7 +54,10 @@ function startGame() {
   obstacle.style.display = "block";
 
   player.style.bottom = "12px";
-  obstacleX = gameArea.clientWidth + 30;
+  player.classList.add("running");
+  player.classList.remove("jumping");
+
+  obstacleX = gameArea.clientWidth + 80;
   obstacle.style.left = obstacleX + "px";
   obstacle.style.right = "auto";
 
@@ -60,10 +65,14 @@ function startGame() {
   obstacleGap = 0;
 
   cancelAnimationFrame(animationFrame);
+  cancelAnimationFrame(jumpFrame);
   clearInterval(scoreTimer);
 
+  // SCORE TIMER
   scoreTimer = setInterval(function () {
+
     if (gameRunning) {
+
       score++;
       scoreText.textContent = score;
 
@@ -71,17 +80,21 @@ function startGame() {
         gameSpeed += 0.5;
       }
     }
+
   }, 100);
 
   animationFrame = requestAnimationFrame(gameLoop);
 }
 
-// Jump
+// JUMP FUNCTION
 function jump() {
 
   if (!gameRunning || isJumping) return;
 
   isJumping = true;
+
+  player.classList.remove("running");
+  player.classList.add("jumping");
 
   const jumpHeight = 125;
   const jumpDuration = 650;
@@ -91,43 +104,61 @@ function jump() {
 
     if (!gameRunning) return;
 
-    const progress = Math.min((now - start) / jumpDuration, 1);
+    const progress = Math.min(
+      (now - start) / jumpDuration,
+      1
+    );
 
-    // Smooth up and down movement
-    playerBottom = 12 + jumpHeight * 4 * progress * (1 - progress);
+    // Smooth jump movement
+    playerBottom =
+      12 + jumpHeight * 4 * progress * (1 - progress);
 
     player.style.bottom = playerBottom + "px";
 
     if (progress < 1) {
-      requestAnimationFrame(animateJump);
+
+      jumpFrame = requestAnimationFrame(animateJump);
+
     } else {
+
       playerBottom = 12;
       player.style.bottom = "12px";
+
       isJumping = false;
+
+      player.classList.remove("jumping");
+      player.classList.add("running");
     }
   }
 
-  requestAnimationFrame(animateJump);
+  jumpFrame = requestAnimationFrame(animateJump);
 }
 
-// Main game loop
+// MAIN GAME LOOP
 function gameLoop(timestamp) {
 
   if (!gameRunning) return;
 
   if (!lastTime) lastTime = timestamp;
 
-  const delta = Math.min((timestamp - lastTime) / 16.67, 2);
+  const delta = Math.min(
+    (timestamp - lastTime) / 16.67,
+    2
+  );
+
   lastTime = timestamp;
 
+  // Obstacle moves from RIGHT to LEFT
   obstacleX -= gameSpeed * delta;
 
-  if (obstacleX < -50) {
-    obstacleGap += 1;
-    obstacleX = gameArea.clientWidth + 80 +
-      Math.random() * 150;
+  // Create next obstacle
+  if (obstacleX < -60) {
 
-    // Small speed variation
+    obstacleGap++;
+
+    obstacleX =
+      gameArea.clientWidth + 100 + Math.random() * 180;
+
     if (obstacleGap % 4 === 0) {
       gameSpeed += 0.2;
     }
@@ -135,7 +166,7 @@ function gameLoop(timestamp) {
 
   obstacle.style.left = obstacleX + "px";
 
-  // Collision detection
+  // COLLISION DETECTION
   const playerRect = player.getBoundingClientRect();
   const obstacleRect = obstacle.getBoundingClientRect();
 
@@ -146,6 +177,7 @@ function gameLoop(timestamp) {
     playerRect.top < obstacleRect.bottom - 5;
 
   if (collision) {
+
     endGame();
     return;
   }
@@ -153,20 +185,30 @@ function gameLoop(timestamp) {
   animationFrame = requestAnimationFrame(gameLoop);
 }
 
-// Game over
+// GAME OVER
 function endGame() {
 
   gameRunning = false;
   isGameOver = true;
 
   cancelAnimationFrame(animationFrame);
+  cancelAnimationFrame(jumpFrame);
   clearInterval(scoreTimer);
 
   if (score > bestScore) {
+
     bestScore = score;
-    localStorage.setItem("acwRunnerBest", bestScore);
+
+    localStorage.setItem(
+      "acwRunnerBest",
+      bestScore
+    );
+
     bestScoreText.textContent = bestScore;
   }
+
+  player.classList.remove("running");
+  player.classList.remove("jumping");
 
   player.style.display = "none";
   obstacle.style.display = "none";
@@ -180,28 +222,38 @@ function endGame() {
 
   messageBox.style.display = "flex";
 
-  document.getElementById("playAgainButton")
+  document
+    .getElementById("playAgainButton")
     .addEventListener("click", startGame);
 }
 
-// Restart game
+// RESTART GAME
 function restartGame() {
+
   gameRunning = false;
+
   cancelAnimationFrame(animationFrame);
+  cancelAnimationFrame(jumpFrame);
   clearInterval(scoreTimer);
 
   startGame();
 }
 
-// Button events
+// BUTTON EVENTS
 startButton.addEventListener("click", startGame);
+
 jumpButton.addEventListener("click", jump);
+
 restartButton.addEventListener("click", restartGame);
 
-// Keyboard controls
+// KEYBOARD CONTROLS
 document.addEventListener("keydown", function (event) {
 
-  if (event.code === "Space" || event.code === "ArrowUp") {
+  if (
+    event.code === "Space" ||
+    event.code === "ArrowUp"
+  ) {
+
     event.preventDefault();
 
     if (!gameRunning && !isGameOver) {
@@ -212,8 +264,8 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-// Initial screen
+// INITIAL SCREEN
 player.style.display = "none";
 obstacle.style.display = "none";
 
-console.log("Cyber Runner is ready!");
+console.log("ACW Cyber Runner is ready!");
