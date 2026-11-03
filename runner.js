@@ -1,17 +1,13 @@
 
-/* =====================================
-   ACW - CYBER RUNNER GAME
-   SIDE SCROLLING VERSION
-===================================== */
-
 const player = document.getElementById("player");
 const obstacle = document.getElementById("obstacle");
 const gameArea = document.getElementById("gameArea");
 
-const scoreText = document.getElementById("score");
-const bestScoreText = document.getElementById("bestScore");
+const scoreElement = document.getElementById("score");
+const bestScoreElement = document.getElementById("bestScore");
 
-const messageBox = document.getElementById("gameMessage");
+const gameMessage = document.getElementById("gameMessage");
+
 const startButton = document.getElementById("startButton");
 const jumpButton = document.getElementById("jumpButton");
 const restartButton = document.getElementById("restartButton");
@@ -21,225 +17,181 @@ let bestScore = Number(localStorage.getItem("acwRunnerBest")) || 0;
 
 let gameRunning = false;
 let isJumping = false;
-let isGameOver = false;
 
-let playerBottom = 12;
-let obstacleX = 0;
-let gameSpeed = 5;
+let obstaclePosition = 0;
+let obstacleSpeed = 5;
 
 let animationFrame;
-let jumpFrame;
-let scoreTimer;
 let lastTime = 0;
-let obstacleGap = 0;
+let scoreTimer = 0;
 
-bestScoreText.textContent = bestScore;
+bestScoreElement.textContent = bestScore;
 
 // START GAME
+
 function startGame() {
+    if (gameRunning) return;
 
-  if (gameRunning) return;
+    cancelAnimationFrame(animationFrame);
 
-  score = 0;
-  gameSpeed = 5;
-  playerBottom = 12;
-  isJumping = false;
-  isGameOver = false;
-  gameRunning = true;
+    score = 0;
+    obstaclePosition = 0;
+    obstacleSpeed = 5;
+    scoreTimer = 0;
 
-  scoreText.textContent = "0";
+    scoreElement.textContent = score;
 
-  messageBox.style.display = "none";
-  player.style.display = "block";
-  obstacle.style.display = "block";
+    obstacle.style.right = "-60px";
+    obstacle.style.display = "block";
 
-  player.style.bottom = "12px";
-  player.classList.add("running");
-  player.classList.remove("jumping");
+    player.classList.remove("jumping");
 
-  obstacleX = gameArea.clientWidth + 80;
-  obstacle.style.left = obstacleX + "px";
-  obstacle.style.right = "auto";
+    isJumping = false;
+    gameRunning = true;
 
-  lastTime = 0;
-  obstacleGap = 0;
+    gameMessage.style.display = "none";
 
-  cancelAnimationFrame(animationFrame);
-  cancelAnimationFrame(jumpFrame);
-  clearInterval(scoreTimer);
+    lastTime = performance.now();
 
-  // SCORE TIMER
-  scoreTimer = setInterval(function () {
-
-    if (gameRunning) {
-
-      score++;
-      scoreText.textContent = score;
-
-      if (score % 100 === 0) {
-        gameSpeed += 0.5;
-      }
-    }
-
-  }, 100);
-
-  animationFrame = requestAnimationFrame(gameLoop);
+    animationFrame = requestAnimationFrame(gameLoop);
 }
 
-// JUMP FUNCTION
+// JUMP
+
 function jump() {
+    if (!gameRunning || isJumping) return;
 
-  if (!gameRunning || isJumping) return;
+    isJumping = true;
 
-  isJumping = true;
+    player.classList.remove("jumping");
 
-  player.classList.remove("running");
-  player.classList.add("jumping");
+    // Restart animation
+    void player.offsetWidth;
 
-  const jumpHeight = 125;
-  const jumpDuration = 650;
-  const start = performance.now();
+    player.classList.add("jumping");
 
-  function animateJump(now) {
+    setTimeout(() => {
+        isJumping = false;
+        player.classList.remove("jumping");
+    }, 650);
+}
 
+// GAME LOOP
+
+function gameLoop(currentTime) {
     if (!gameRunning) return;
 
-    const progress = Math.min(
-      (now - start) / jumpDuration,
-      1
-    );
+    const deltaTime = Math.min((currentTime - lastTime) / 16.67, 2);
+    lastTime = currentTime;
 
-    // Smooth jump movement
-    playerBottom =
-      12 + jumpHeight * 4 * progress * (1 - progress);
+    scoreTimer += deltaTime;
 
-    player.style.bottom = playerBottom + "px";
+    if (scoreTimer >= 10) {
+        score++;
+        scoreElement.textContent = score;
+        scoreTimer = 0;
 
-    if (progress < 1) {
-
-      jumpFrame = requestAnimationFrame(animateJump);
-
-    } else {
-
-      playerBottom = 12;
-      player.style.bottom = "12px";
-
-      isJumping = false;
-
-      player.classList.remove("jumping");
-      player.classList.add("running");
+        // Slowly increase difficulty
+        obstacleSpeed = Math.min(10, 5 + score * 0.15);
     }
-  }
 
-  jumpFrame = requestAnimationFrame(animateJump);
+    // Move obstacle from right to left
+    obstaclePosition += obstacleSpeed * deltaTime;
+
+    const areaWidth = gameArea.clientWidth;
+
+    obstacle.style.right =
+        (obstaclePosition - 60) + "px";
+
+    // Reset obstacle
+    if (obstaclePosition > areaWidth + 60) {
+        obstaclePosition = 0;
+    }
+
+    // COLLISION CHECK
+    checkCollision();
+
+    if (gameRunning) {
+        animationFrame = requestAnimationFrame(gameLoop);
+    }
 }
 
-// MAIN GAME LOOP
-function gameLoop(timestamp) {
+// COLLISION
 
-  if (!gameRunning) return;
+function checkCollision() {
+    const playerRect = player.getBoundingClientRect();
+    const obstacleRect = obstacle.getBoundingClientRect();
 
-  if (!lastTime) lastTime = timestamp;
+    const collision =
+        playerRect.left + 15 < obstacleRect.right - 8 &&
+        playerRect.right - 15 > obstacleRect.left + 8 &&
+        playerRect.bottom - 5 > obstacleRect.top + 8 &&
+        playerRect.top + 10 < obstacleRect.bottom;
 
-  const delta = Math.min(
-    (timestamp - lastTime) / 16.67,
-    2
-  );
-
-  lastTime = timestamp;
-
-  // Obstacle moves from RIGHT to LEFT
-  obstacleX -= gameSpeed * delta;
-
-  // Create next obstacle
-  if (obstacleX < -60) {
-
-    obstacleGap++;
-
-    obstacleX =
-      gameArea.clientWidth + 100 + Math.random() * 180;
-
-    if (obstacleGap % 4 === 0) {
-      gameSpeed += 0.2;
+    if (collision) {
+        endGame();
     }
-  }
-
-  obstacle.style.left = obstacleX + "px";
-
-  // COLLISION DETECTION
-  const playerRect = player.getBoundingClientRect();
-  const obstacleRect = obstacle.getBoundingClientRect();
-
-  const collision =
-    playerRect.right - 12 > obstacleRect.left + 8 &&
-    playerRect.left + 12 < obstacleRect.right - 8 &&
-    playerRect.bottom > obstacleRect.top + 10 &&
-    playerRect.top < obstacleRect.bottom - 5;
-
-  if (collision) {
-
-    endGame();
-    return;
-  }
-
-  animationFrame = requestAnimationFrame(gameLoop);
 }
 
 // GAME OVER
+
 function endGame() {
+    gameRunning = false;
 
-  gameRunning = false;
-  isGameOver = true;
+    cancelAnimationFrame(animationFrame);
 
-  cancelAnimationFrame(animationFrame);
-  cancelAnimationFrame(jumpFrame);
-  clearInterval(scoreTimer);
+    if (score > bestScore) {
+        bestScore = score;
 
-  if (score > bestScore) {
+        localStorage.setItem("acwRunnerBest", bestScore);
 
-    bestScore = score;
+        bestScoreElement.textContent = bestScore;
+    }
 
-    localStorage.setItem(
-      "acwRunnerBest",
-      bestScore
-    );
+    gameMessage.style.display = "flex";
 
-    bestScoreText.textContent = bestScore;
-  }
+    gameMessage.innerHTML = `
+        <h2>GAME OVER!</h2>
+        <p>Your Score: ${score}</p>
+        <p>Best Score: ${bestScore}</p>
+        <button id="playAgainButton">PLAY AGAIN</button>
+    `;
 
-  player.classList.remove("running");
-  player.classList.remove("jumping");
-
-  player.style.display = "none";
-  obstacle.style.display = "none";
-
-  messageBox.innerHTML = `
-    <h2>GAME OVER!</h2>
-    <p>Your Score: ${score}</p>
-    <p>Best Score: ${bestScore}</p>
-    <button id="playAgainButton">PLAY AGAIN</button>
-  `;
-
-  messageBox.style.display = "flex";
-
-  document
-    .getElementById("playAgainButton")
-    .addEventListener("click", startGame);
+    document.getElementById("playAgainButton")
+        .addEventListener("click", startGame);
 }
 
-// RESTART GAME
+// RESTART
+
 function restartGame() {
+    cancelAnimationFrame(animationFrame);
 
-  gameRunning = false;
+    gameRunning = false;
+    isJumping = false;
 
-  cancelAnimationFrame(animationFrame);
-  cancelAnimationFrame(jumpFrame);
-  clearInterval(scoreTimer);
+    player.classList.remove("jumping");
 
-  startGame();
+    score = 0;
+    obstaclePosition = 0;
+
+    scoreElement.textContent = 0;
+
+    obstacle.style.right = "-60px";
+
+    gameMessage.style.display = "flex";
+
+    gameMessage.innerHTML = `
+        <h2>READY TO RUN?</h2>
+        <p>Press START to begin your adventure!</p>
+        <button id="newStartButton">START GAME</button>
+    `;
+
+    document.getElementById("newStartButton")
+        .addEventListener("click", startGame);
 }
 
 // BUTTON EVENTS
+
 startButton.addEventListener("click", startGame);
 
 jumpButton.addEventListener("click", jump);
@@ -247,25 +199,26 @@ jumpButton.addEventListener("click", jump);
 restartButton.addEventListener("click", restartGame);
 
 // KEYBOARD CONTROLS
-document.addEventListener("keydown", function (event) {
 
-  if (
-    event.code === "Space" ||
-    event.code === "ArrowUp"
-  ) {
+document.addEventListener("keydown", function(event) {
 
-    event.preventDefault();
+    if (event.code === "Space" || event.code === "ArrowUp") {
+        event.preventDefault();
 
-    if (!gameRunning && !isGameOver) {
-      startGame();
-    } else {
-      jump();
+        jump();
     }
-  }
+
 });
 
-// INITIAL SCREEN
-player.style.display = "none";
-obstacle.style.display = "none";
+// MOBILE TOUCH CONTROL
 
-console.log("ACW Cyber Runner is ready!");
+gameArea.addEventListener("touchstart", function(event) {
+    if (gameRunning) {
+        event.preventDefault();
+        jump();
+    }
+}, { passive: false });
+
+// INITIAL DISPLAY
+
+bestScoreElement.textContent = bestScore;
